@@ -3,13 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-
-console.log('DB_URL from AppModule:', process.env.DB_URL);
+import { BookModule } from './book-module/book.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(), // Ensure env variables are loaded globally
-    DatabaseModule
+    DatabaseModule,
+    BookModule
   ],
   controllers: [AppController],
   providers: [AppService],
