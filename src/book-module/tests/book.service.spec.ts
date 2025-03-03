@@ -100,7 +100,7 @@ describe('BookService', () => {
         success: true,
         statusCode: HttpStatus.CREATED,
         message: CREATED,
-        data: [mockBookDocument], // Ensure the books are inside the "data" field
+        data: [mockBookDocument], 
       });
     });
   
