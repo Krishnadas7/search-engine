@@ -16,4 +16,3 @@ import { BookModule } from './book-module/book.module';
 })
 export class AppModule {}
 
-console.log('DB_URL from downodule:', process.env.DB_URL);
