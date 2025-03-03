@@ -19,14 +19,14 @@ export class BookController{
     //get book function
 
     @Get()
-    async getBook():Promise<CreateBookDto[]>{
+    async getBook():Promise<CreateBookResponse>{
         return await this.bookService.getBook()
     }
 
     //search book function by title name using query params
-    
+
     @Get("/bookSearch")
-    async searchBookBytitle(@Query('title')title:string):Promise<CreateBookDto[]>{
+    async searchBookBytitle(@Query('title')title:string):Promise<CreateBookResponse>{
         return await this.bookService.searchBookByTitle(title)
     }
     

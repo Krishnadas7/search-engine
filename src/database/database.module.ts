@@ -5,7 +5,7 @@ console.log(process.env.DB_URL);
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DB_URL as string || "mongodb://127.0.0.1:27017/nestjs-app"),
+    MongooseModule.forRoot(process.env.DB_URL as string || "mongodb+srv://skrishnadas38:12345@cluster0.adt0m.mongodb.net/nestjs-app"),
   ],
 })
 export class DatabaseModule implements OnModuleInit {

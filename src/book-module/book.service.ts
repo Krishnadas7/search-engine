@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Book,BookDocument } from "src/schemas/book.schema";
+import { Book, BookDocument } from "../schemas/book.schema";
 import {Model} from 'mongoose'
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateBookDto } from "./dto/book.dto";
 import { CreateBookResponse } from "./interface/book.interface";
-import { ALREADY_EXISTS, CREATED, FAILED, SEARCH_FAILED } from "src/common/constants";
+import { ALREADY_EXISTS, CREATED, FAILED, SEARCH_FAILED } from "../common/constants";
 
 @Injectable()
 export class BookService{
@@ -20,6 +20,7 @@ export class BookService{
         const existingBook = await this.bookModel.findOne({ title: book.title });
         if (existingBook) {
           return {
+            success:false,
             statusCode: HttpStatus.CONFLICT,
             message: ALREADY_EXISTS,
           };
@@ -30,48 +31,66 @@ export class BookService{
         const newBook = new this.bookModel(book);
         await newBook.save();
         return {
+          success:true,
           statusCode: HttpStatus.CREATED,
           message: CREATED,
         };
       } catch (error) {
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.BAD_REQUEST,
-            message: FAILED,
-            error: error.message,
-          },
-          HttpStatus.BAD_REQUEST,
-        );
+        return {
+          success: false,
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: FAILED,
+          error: error.message,
+        };
       }
     }
 
     // get book service return all books from database
 
-    async getBook():Promise<CreateBookDto[]>{
-      return await this.bookModel.find()
+    async getBook():Promise<CreateBookResponse>{
+      try{
+        const books = await this.bookModel.find()
+        return {
+          success:true,
+          statusCode: HttpStatus.CREATED,
+          message: CREATED,
+          data:books
+        };
+      }catch(error){
+        return {
+          success: false,
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: FAILED,
+          error: error.message,
+        };
+      }
+      
     }
 
     // search book service by titile name
 
-    async searchBookByTitle(title: string): Promise<CreateBookDto[]> {
+    async searchBookByTitle(title: string): Promise<CreateBookResponse> {
       try {
 
         const regexPattern = new RegExp(`\\b${title}`, "i"); 
-            
+
         const books = await this.bookModel.find({
           title: { $regex: regexPattern }, 
         });
-         
-        return books;
+        return {
+          success:true,
+          statusCode: HttpStatus.OK,
+          message: CREATED,
+          data:books
+        };
+  
       } catch (error) {
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-            message: SEARCH_FAILED,
-            error: error.message,
-          },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+        return {
+          success: false,
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: FAILED,
+          error: error.message,
+        };
       }
     }
     

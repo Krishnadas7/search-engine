@@ -7,7 +7,7 @@ import { BookModule } from './book-module/book.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Ensure env variables are loaded globally
+    ConfigModule.forRoot(), 
     DatabaseModule,
     BookModule
   ],
