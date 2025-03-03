@@ -112,7 +112,7 @@ describe('BookService', () => {
         success: true,
         statusCode: HttpStatus.CREATED,
         message: CREATED,
-        data: [], // Ensure empty data array is returned
+        data: [], 
       });
     });
   

@@ -4,7 +4,7 @@ import {Model} from 'mongoose'
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateBookDto } from "./dto/book.dto";
 import { CreateBookResponse } from "./interface/book.interface";
-import { ALREADY_EXISTS, CREATED, FAILED, SEARCH_FAILED } from "../common/constants";
+import { ALL_BOOKS, ALREADY_EXISTS, CREATED, FAILED, SEARCH_FAILED } from "../common/constants";
 
 @Injectable()
 export class BookService{
@@ -38,7 +38,7 @@ export class BookService{
       } catch (error) {
         return {
           success: false,
-          statusCode: HttpStatus.BAD_REQUEST,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: FAILED,
           error: error.message,
         };
@@ -52,14 +52,14 @@ export class BookService{
         const books = await this.bookModel.find()
         return {
           success:true,
-          statusCode: HttpStatus.CREATED,
-          message: CREATED,
+          statusCode: HttpStatus.OK,
+          message: ALL_BOOKS,
           data:books
         };
       }catch(error){
         return {
           success: false,
-          statusCode: HttpStatus.BAD_REQUEST,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: FAILED,
           error: error.message,
         };
@@ -80,14 +80,14 @@ export class BookService{
         return {
           success:true,
           statusCode: HttpStatus.OK,
-          message: CREATED,
+          message: ALL_BOOKS,
           data:books
         };
   
       } catch (error) {
         return {
           success: false,
-          statusCode: HttpStatus.BAD_REQUEST,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: FAILED,
           error: error.message,
         };
